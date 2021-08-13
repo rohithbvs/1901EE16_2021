@@ -1,2 +1,2 @@
-# 1901EE16_2021
-CS 384 Tutorial
+# tuts_2021
+CS384 Tuts Projects
