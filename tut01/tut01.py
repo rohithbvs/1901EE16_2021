@@ -18,7 +18,7 @@ def meraki_helper(x):
         print("Yes - {} is a Meraki number".format(temp))
         return 1
     else:
-        print("NO - {} is not a Meraki number".format(temp))
+        print("No - {} is not a Meraki number".format(temp))
         return 0
 
 
