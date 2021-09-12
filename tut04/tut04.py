@@ -5,6 +5,7 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 
 
+
  
 def output_by_subject():
     DIRECTORY = "output_by_subject"
@@ -53,7 +54,7 @@ def output_individual_roll():
             data.append(data1[3])
             data.append(data1[8])
             if (data[0] =="rollno"):continue
-          
+            
             if data[0] not in rollno_exist:
                 rollno_exist.append(data[0])
                 wb=Workbook()
