@@ -53,7 +53,7 @@ def output_individual_roll():
             data.append(data1[3])
             data.append(data1[8])
             if (data[0] =="rollno"):continue
-            write_on_file(data[0],data,rollno_exist,header)
+          
             if data[0] not in rollno_exist:
                 rollno_exist.append(data[0])
                 wb=Workbook()
