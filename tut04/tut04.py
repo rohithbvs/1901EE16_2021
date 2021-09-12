@@ -8,17 +8,17 @@ from openpyxl import load_workbook
 def write_on_file(value,data,exist_list,header):
     '''if the file doesn't exist the if condition creates a xlsx file '''
     if value not in exist_list:
-        exist_list.append(data[2])
+        exist_list.append(value)
         wb=Workbook()
         sheet=wb.active
         sheet.append(header)
         sheet.append(data)
-        wb.save(f'output_by_subject\\{data[2]}.xlsx')
+        wb.save(f'output_by_subject\\{value}.xlsx')
     else:
-        wb=load_workbook(r'output_by_subject\\{}.xlsx'.format(data[2]))
+        wb=load_workbook(r'output_by_subject\\{}.xlsx'.format(value))
         sheet=wb.active
         sheet.append(data)
-        wb.save(f'output_by_subject\\{data[2]}.xlsx')
+        wb.save(f'output_by_subject\\{value}.xlsx')
 
  
 def output_by_subject():
@@ -38,7 +38,18 @@ def output_by_subject():
             data.append(data1[3])
             data.append(data1[8])
             if (data[2] =="subno"):continue
-            write_on_file(data[2],data,subno_exist,header)
+            if data[2] not in subno_exist:
+                subno_exist.append(data[2])
+                wb=Workbook()
+                sheet=wb.active
+                sheet.append(header)
+                sheet.append(data)
+                wb.save(f'output_by_subject\\{data[2]}.xlsx')
+            else:
+                wb=load_workbook(r'output_by_subject\\{}.xlsx'.format(data[2]))
+                sheet=wb.active
+                sheet.append(data)
+                wb.save(f'output_by_subject\\{data[2]}.xlsx')
     return
  
 def output_individual_roll():
@@ -57,7 +68,19 @@ def output_individual_roll():
             data.append(data1[3])
             data.append(data1[8])
             if (data[0] =="rollno"):continue
-            write_on_file(data[2],data,rollno_exist,header)
+            write_on_file(data[0],data,rollno_exist,header)
+            if data[0] not in rollno_exist:
+                rollno_exist.append(data[0])
+                wb=Workbook()
+                sheet=wb.active
+                sheet.append(header)
+                sheet.append(data)
+                wb.save(f'output_individual_roll\\{data[0]}.xlsx')
+            else:
+                wb=load_workbook(r'output_individual_roll\\{}.xlsx'.format(data[0]))
+                sheet=wb.active
+                sheet.append(data)
+                wb.save(f'output_individual_roll\\{data[0]}.xlsx')
     return
  
 output_by_subject()
