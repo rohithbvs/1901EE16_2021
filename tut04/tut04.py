@@ -4,21 +4,6 @@ import csv
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
-''' this function is useful for writing the data in the file'''
-def write_on_file(value,data,exist_list,header):
-    '''if the file doesn't exist the if condition creates a xlsx file '''
-    if value not in exist_list:
-        exist_list.append(value)
-        wb=Workbook()
-        sheet=wb.active
-        sheet.append(header)
-        sheet.append(data)
-        wb.save(f'output_by_subject\\{value}.xlsx')
-    else:
-        wb=load_workbook(r'output_by_subject\\{}.xlsx'.format(value))
-        sheet=wb.active
-        sheet.append(data)
-        wb.save(f'output_by_subject\\{value}.xlsx')
 
  
 def output_by_subject():
