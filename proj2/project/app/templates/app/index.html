@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcript Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'app/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="upload row">
+          <h1>Project 2 CS384 - GUI Based Transcript Generator</h1>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+            <div class="col">
+              <h3>Upload grades</h3>
+              <input required class="ibutton" type="file" id="document1" name="document1">
+           </div>
+           <div class="col">
+            <h3>Upload names-roll</h3>
+            <input required class="ibutton" type="file" id="document2" name="document2">
+          </div>
+          <div class="col">
+            <h3>Upload subjects_master</h3>
+            <input required class="ibutton" type="file" id="document3" name="document3">
+          </div>
+            </div>
+            
+              <div class="row">
+                <div class="col">
+                  <h3>Upload Sign</h3>
+                  <input class="ibutton" type="file" id="sign" name="sign">
+                </div>
+                <div class="col">
+                  <h3 >Upload Seal</h3>
+                  <input class="ibutton" type="file" id="seal" name="seal">
+                </div>
+              </div>
+           
+            <div class="row">
+            <button class="ibutton" type="submit">Upload Files</button>
+          </div>
+        
+      </form>
+    </div>
+    <div class="row">
+      
+    <div class="row">
+      <h3>Generate Transcripts over range</h3>
+    </div>
+    <form action= {% url 'generate_over_range' %} method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col">
+        <h4>Start</h4>
+        <input required class="ibutton1" type="text" id="start" name="start">
+      </div>
+      <div class="col">
+        <h4> End</h4>
+        <input required class="ibutton1" type="text" id="end" name="end">
+      </div>
+      </div>
+      <div class="row">
+        <button class="ibutton" type="submit">Generate over range</button>
+      </div>
+  </form>
+   </div>
+   <div class="row">
+     <div class="row">
+       <h3>Generate all Transcripts</h3>
+     </div>
+     <form action={% url 'generate_all' %}>
+       <div class="row">
+     <button class="ibutton" type="submit">Generate Transcripts</button>
+    </div>
+    </form>
+   </div>
+    </div>
+
+   
+    
+</body>
+</html>
