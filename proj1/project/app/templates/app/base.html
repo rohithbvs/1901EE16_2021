@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marksheet Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/styles.css' %}">
+</head>
+<body>
+    
+   
+
+    <div class="container">
+      <div class="upload row">
+        
+          
+        <h1>Project 1 CS384 - GUI Based Marksheet Generator</h1>
+          
+          
+        
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+         <div class="row">
+           <div class="col-6">
+          <h3>Upload master-roll</h3>
+          <input class="ibutton" type="file" id="document1" name="document1">
+           </div>
+           <div class="col-6">
+          <h3>Upload response sheet</h3>
+          <input class="ibutton" type="file" id="document2" name="document2">
+           </div>
+          </div>
+      </div>
+        <div class="row">
+          
+      <label for="posmarks"><h3>Positive Marks</h3></label><br>
+      <input class="ibutton1"  id="pmarks" name="pmarks"><br>
+          </div>
+          <div class="row">
+      <label for="negmarks"><h3>Negative Marks</h3></label><br>
+      <input class="ibutton1"  id="nmarks" name="nmarks"><br>
+          </div>
+        </div>
+        <div class="row">
+          
+      <button class="ibutton" type="submit">Generate Roll No wise Marksheet</button>
+          
+        </div>
+    </form>
+
+      
+      <form action= {% url 'concise-sheet' %} >
+        <div class="row">
+      <button class="ibutton">Generate Concise sheet</button>
+        </div>
+      </form>
+      <form action= {% url 'email' %} >
+        <div class="row">
+      <button class="ibutton">Send Email</button>
+        </div>
+      </form>
+  </div>
+   
+
+    
+</body>
+</html>
