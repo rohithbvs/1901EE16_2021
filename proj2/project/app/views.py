@@ -19,6 +19,7 @@ stamp_requirement = False
 signature_requirement=False
 stamp_file = ""
 signature_file = ""
+generate_all_transcript=False
 
 def generate_marksheet(startRange,endRange):
     #storing file addresses for each csv file
@@ -374,7 +375,17 @@ def generate_transcript(stamp_file,signature_file):
 
 
 def deleteXLSX(startRange,endRange):
-    roll_not_present=[]
+    roll_not_present={}
+    prefix='' if generate_all_transcript else startRange[0:6]
+    start=0 if generate_all_transcript else int(startRange[6:])
+    end=0 if generate_all_transcript else int(endRange[6:])
+    while generate_all_transcript==False and start<=end:
+        #assumed roll number between 1 and 99
+        if start<10:
+            roll_not_present[prefix+"0"+(str(start))]=False
+        else:
+            roll_not_present[prefix+(str(start))]=False
+        start+=1
     xlsx_file=[]
     output_folder=r"./transcriptsIITP"
     for roll_file in os.listdir(output_folder):
@@ -382,10 +393,21 @@ def deleteXLSX(startRange,endRange):
         ext=roll_file.split('.')[1]
         if(ext=='xlsx'):
             xlsx_file.append(roll_file)
-            
+
+    #deleted xlsx     
     for file in xlsx_file:
         os.remove(output_folder+"/"+file)
-    return
+
+    if generate_all_transcript==False:
+        for roll_file in os.listdir(output_folder):
+            roll=roll_file.split('.')[0]
+            ext=roll_file.split('.')[1]
+            del roll_not_present[roll]
+    absent_roll=[]
+    if generate_all_transcript==False:
+        for key in roll_not_present:
+            absent_roll.append(key)
+    return absent_roll
 
 
 def home(request):
@@ -433,8 +455,10 @@ def generate_over_range(request):
         end_range = end_range.upper()
         generate_marksheet(start_range,end_range)
         generate_transcript(stamp_file,signature_file)
-        deleteXLSX(start_range,end_range)
-        return render(request,'app/index.html')
+        absent = deleteXLSX(start_range,end_range)
+        context = {'absent':absent}
+        #print(absent)
+        return render(request,'app/index.html',context)
 
     return render(request,'app/index.html')
 
@@ -443,6 +467,7 @@ def generate_all(request):
     end_range='ZZZZZZZZZ'
     generate_marksheet(start_range,end_range)
     generate_transcript(stamp_file,signature_file)
-    deleteXLSX(start_range,end_range)
-    return render(request,'app/index.html')
+    absent = deleteXLSX(start_range,end_range)
+    context = {'absent':absent}
+    return render(request,'app/index.html',context)
 # Create your views here.

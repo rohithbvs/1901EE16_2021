@@ -15,7 +15,7 @@
     <div class="container">
         <div class="upload row">
           <h1>Project 2 CS384 - GUI Based Transcript Generator</h1>
-          <form method="post" enctype="multipart/form-data">
+          <form action= {% url 'home' %} method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
             <div class="col">
@@ -82,7 +82,16 @@
     </form>
    </div>
     </div>
-
+    {% if absent %}
+    <div class="container">
+    <h3>These roll numbers doesn't exit </h3>
+    <ol>
+      {% for x in absent %}
+        <li>{{x}} </li>
+      {% endfor %}
+    </ol>
+    </div>
+    {% endif %}
    
     
 </body>

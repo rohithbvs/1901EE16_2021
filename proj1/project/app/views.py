@@ -25,6 +25,7 @@ total_ques = None
 answer = []
 absent_list = []
 def home(request):
+    '''i am taking the files from the user using html form post request and storing them in media folder'''
     if request.method == 'POST':
         global positive_marks
         global negative_marks
@@ -49,23 +50,26 @@ def home(request):
         if not os.path.exists(DIRECTORY): 
             os.makedirs(DIRECTORY)
         
+        ''' name_roll is dictionary which has roll no as key '''
         global name_roll
         with open('media/'+uploaded_file1.name, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 name_roll[row['roll']] = row['name']
         
-        #print(name_roll)
+
+        '''response_dict and response_dict2 is a dictionary taken from response.csv with roll no as key'''
         global response_dict 
         global response_dict2 
         with open('media/'+uploaded_file2.name, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                #print(dict(row))
                 response_dict[row['Roll Number']] = [row['Email address'],row['Score'],row['Name'],row['IITP webmail'],row['Phone (10 digit only)']]
                 response_dict2[row['Roll Number']] = [row['Timestamp'],row['Email address'],row['Score'],row['Name'],row['IITP webmail'],row['Phone (10 digit only)'],row['Roll Number']]
         #print(response_dict2.keys())
         
+        ''' answer is a list which stores right answers of given quiz'''
+        ''' rollno_res is a dictionary of rollno as key and a list of students response'''
         global answer
         global rollno_res
         with open('media/'+uploaded_file2.name, 'r') as file:
@@ -76,8 +80,12 @@ def home(request):
                 rollno_res[row[6]] = row[7:]
                 if(row[6]=='ANSWER'):
                     answer = row[7:]
+
+
         #print(rollno_res)
         #print(answer)
+
+        '''rollno_summ is a dictionary of rollno as key and list of the students right,wrong,unattempted answers'''
         global rollno_summ
         for key in response_dict2:
             if key is not 'Roll Number':
@@ -99,13 +107,16 @@ def home(request):
                 else:
                     wrong+=1
             rollno_summ[key] = [right,wrong,unattempted]
-        #print(rollno_summ)
+
+
+
+        '''absent list consists of rollno of students who didn't attempt quiz'''
         global absent_list
-        #print(absent_list)
         for key in name_roll:
             if key not in response_dict.keys():
                 absent_list.append(key)
-        #print(absent_list)
+        
+        '''uploading all data in excel files'''
         for key in response_dict2:
             wb=load_workbook(r'sample_output\\marksheet\\{}.xlsx'.format(key))
             ws = wb.worksheets[0]
@@ -170,6 +181,7 @@ def home(request):
     return render(request,'app/base.html')
 
 def send_emails(request):
+    '''we are sending mails to students emails using smtp server'''
     for key in response_dict:
         mail = EmailMessage("quiz marks", "PFA", "cs384quizproject@gmail.com", [response_dict[key][0],response_dict[key][3]])
         mail.attach_file(f'sample_output\\marksheet\\{key}.xlsx')
@@ -177,12 +189,11 @@ def send_emails(request):
     return render(request,'app/base.html',{'message2':'Emails are being sent'})
 
 def concise_sheet(request):
-    #print(rollno_summ)
+    '''we are creating concise sheet and adding required data'''
     wb=Workbook()
     sheet=wb.active
     sheet.title = "concise_sheet"
     heading = ['Timestamp','Email address','Goggle_Score','Name','IITP webmail','Phone (10 digit only)','Score_Ater_negative','Roll Number']
-    #total_ques = rollno_summ['ANSWER'][0]
     for i in range(len(answer)):
         heading.append('Unnamed: '+str(7+i))
     heading.append('statusAns')
@@ -198,6 +209,8 @@ def concise_sheet(request):
             sheet.append(lst)
     wb.save(f'sample_output\\marksheet\\concise_sheet.xlsx')
     
+
+    '''adding absent students in excel sheet'''
     wb=load_workbook(r'sample_output\\marksheet\\concise_sheet.xlsx')
     sheet = wb.active
     for x in absent_list:
